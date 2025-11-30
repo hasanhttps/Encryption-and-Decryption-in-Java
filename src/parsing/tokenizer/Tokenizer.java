@@ -2,6 +2,7 @@ package parsing.tokenizer;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import parsing.token.*;
 
 public abstract class Tokenizer {
@@ -10,29 +11,23 @@ public abstract class Tokenizer {
     public abstract List<String> keywords();
 
     protected List<Token> makeTokens(String text) {
-
-        char newline = '\n';
-        boolean isComment = false;
-        String brackets = "{[()]}";
         StringBuilder word = new StringBuilder();
         List<Token> tokens = new ArrayList<Token>();
 
+        char newline = '\n';
+
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            if (c == '/' && text.charAt(i + 1) == '/') isComment = true;
-            if (isComment && c == newline) isComment = false;
-            if (isComment) continue;
-
             if (Character.isAlphabetic(c) || Character.isDigit(c)) {
                 word.append(c);
-            } else{
+            } else {
                 if (word.length() > 0) {
                     tokens.add(new Word(word.toString()));
                     word.delete(0, word.length());
                 }
-                if (brackets.indexOf(c) != -1) {
-                    tokens.add(new Bracket(Character.toString(c), (c == '{' || c == '}') ? "curl" : (c == '[' || c == ']') ? "b" : "p"));
-                } else if (c != '/' && c != ' ' && c != newline) {
+                if (c == newline) {
+                    tokens.add(new LineToken("\n"));
+                } else {
                     tokens.add(new Symbol(Character.toString(c)));
                 }
             }

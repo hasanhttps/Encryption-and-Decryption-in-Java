@@ -4,6 +4,8 @@ import java.util.List;
 import parsing.token.*;
 
 public class Parser {
+
+    private static StringBuilder syntaxTree = new StringBuilder();
     
     public static String syntaxTree(List<Token> tokens) {
 
@@ -23,13 +25,13 @@ public class Parser {
             else printRow(count, token.getString());
 
         }
-        return "";
+        return syntaxTree.toString();
     }
 
-    public static  void printRow(int count, String c){
+    public static void printRow(int count, String c){
         for (int j = 0; j < count; j++) 
-            System.out.print("    ");
-        System.out.println(c);
+            syntaxTree.append("    ");
+        String line = c + "\n";
+        syntaxTree.append(line);
     }
-
 }
